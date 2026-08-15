@@ -98,8 +98,8 @@ function figmaSiteConfiguration(config: FigmaSiteConfiguration): Plugin {
     return html.replace(`<!-- ${slotName} -->`, content)
   }
 
-  const title = config.title ?? "Figma Make App"
-  const description = config.description ?? ''
+  const title = config.title ?? 'DocuSense AI'
+  const description = config.description ?? 'Effortlessly upload and query documents to receive precise, citation-backed answers.'
   const favicon = config.icons?.icon ?? ''
   const socialImage = config.openGraph?.image ?? ''
   const language = sanitizeHtmlValue(config.language) || 'en'
