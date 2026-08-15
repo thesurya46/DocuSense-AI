@@ -1,0 +1,10 @@
+{
+  "description": "Effortlessly upload and query documents to receive precise, citation-backed answers, enhancing research efficiency and accuracy for professionals.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
