@@ -1,4 +1,4 @@
-# 🧠 DocuSense-AI 
+# 🧠 DocuSense-AI
 
 > A Retrieval-Augmented Generation (RAG) Document Intelligence System — upload documents, ask questions, and get AI-powered answers with cited sources.
 
