@@ -31,7 +31,9 @@ export async function fetchDocuments(): Promise<Document[]> {
 }
 
 export async function upsertDocument(doc: Document): Promise<void> {
-  const { error } = await supabase.from('documents').upsert(documentToRow(doc) as never)
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) throw new Error('Not authenticated. Please sign in.')
+    const { error } = await supabase.from('documents').upsert(documentToRow(doc, user.id) as never)
   if (error) throw new Error(error.message)
 }
 
@@ -52,7 +54,9 @@ export async function fetchConversations(): Promise<Conversation[]> {
 }
 
 export async function upsertConversation(conv: Conversation): Promise<void> {
-  const { error } = await supabase.from('conversations').upsert(conversationToRow(conv) as never)
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) throw new Error('Not authenticated. Please sign in.')
+    const { error } = await supabase.from('conversations').upsert(conversationToRow(conv, user.id) as never)
   if (error) throw new Error(error.message)
 }
 
@@ -190,6 +194,7 @@ function documentToRow(doc: Document): Record<string, unknown> {
     description: doc.description ?? null,
     uploaded_at: doc.uploadedAt.toISOString(),
     indexed_at:  doc.indexedAt?.toISOString() ?? null,
+      user_id:     userId,
   }
 }
 
@@ -226,5 +231,6 @@ function conversationToRow(conv: Conversation): Record<string, unknown> {
       timestamp:     m.timestamp.toISOString(),
     })),
     updated_at:   conv.updatedAt.toISOString(),
+      user_id:    userId,
   }
 }

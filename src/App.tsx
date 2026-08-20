@@ -14,6 +14,7 @@ import Settings from './pages/Settings'
 import Profile from './pages/Profile'
 import CommandPalette from './components/CommandPalette'
 import { ToastProvider, toast } from './components/Toast'
+import { DEMO_DOCUMENTS, DEMO_CONVERSATIONS } from './data/demo'
 
 type Theme = 'dark' | 'light'
 
@@ -45,9 +46,18 @@ export default function App() {
   useEffect(() => {
     if (!user) { setDocuments([]); setConversations([]); return }
     setDataLoading(true)
-    Promise.all([fetchDocuments(), fetchConversations()])
-      .then(([docs, convs]) => { setDocuments(docs); setConversations(convs) })
-      .catch((err) => toast(`Failed to load data: ${err.message}`, 'error'))
+    Promise.allSettled([fetchDocuments(), fetchConversations()])
+      .then(([documentsResult, conversationsResult]) => {
+        const docs = documentsResult.status === 'fulfilled' ? documentsResult.value : []
+        const convs = conversationsResult.status === 'fulfilled' ? conversationsResult.value : []
+
+        setDocuments(docs.length > 0 ? docs : DEMO_DOCUMENTS)
+        setConversations(convs.length > 0 ? convs : DEMO_CONVERSATIONS)
+
+        if (documentsResult.status === 'rejected' || conversationsResult.status === 'rejected') {
+          toast('Database tables are not ready. Showing demo workspace data.', 'info')
+        }
+      })
       .finally(() => setDataLoading(false))
   }, [user])
 

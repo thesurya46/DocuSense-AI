@@ -5,6 +5,7 @@ export default function Auth() {
   const [mode, setMode] = useState<'signin' | 'signup'>('signin')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
@@ -104,10 +105,20 @@ export default function Auth() {
 
             <div style={{ marginBottom: 24 }}>
               <label style={{ fontSize: 12.5, color: 'var(--color-text-2)', display: 'block', marginBottom: 7, fontWeight: 500 }}>Password</label>
-              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required placeholder={mode === 'signup' ? 'Min. 6 characters' : '••••••••'}
-                style={{ width: '100%', background: 'var(--color-surface-2)', border: '1px solid var(--color-border-strong)', borderRadius: 8, padding: '11px 14px', color: 'var(--color-text)', fontSize: 14, fontFamily: 'var(--font-sans)', outline: 'none', boxSizing: 'border-box', transition: 'border-color 0.15s' }}
-                onFocus={(e) => (e.currentTarget.style.borderColor = 'var(--color-cyan)88')}
-                onBlur={(e) => (e.currentTarget.style.borderColor = 'var(--color-border-strong)')} />
+              <div style={{ position: 'relative' }}>
+                <input type={showPassword ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} required placeholder={mode === 'signup' ? 'Min. 6 characters' : '••••••••'}
+                  style={{ width: '100%', background: 'var(--color-surface-2)', border: '1px solid var(--color-border-strong)', borderRadius: 8, padding: '11px 44px 11px 14px', color: 'var(--color-text)', fontSize: 14, fontFamily: 'var(--font-sans)', outline: 'none', boxSizing: 'border-box', transition: 'border-color 0.15s' }}
+                  onFocus={(e) => (e.currentTarget.style.borderColor = 'var(--color-cyan)88')}
+                  onBlur={(e) => (e.currentTarget.style.borderColor = 'var(--color-border-strong)')} />
+                <button type="button" onClick={() => setShowPassword((visible) => !visible)} aria-label={showPassword ? 'Hide password' : 'Show password'} title={showPassword ? 'Hide password' : 'Show password'}
+                  style={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)', width: 30, height: 30, display: 'flex', alignItems: 'center', justifyContent: 'center', border: 'none', borderRadius: 5, background: 'transparent', color: 'var(--color-text-3)', cursor: 'pointer' }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--color-text)')}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--color-text-3)')}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    {showPassword ? <><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z" /><circle cx="12" cy="12" r="2.5" /></> : <><path d="M3 3l18 18" /><path d="M10.6 6.1A10.8 10.8 0 0 1 12 6c6.5 0 10 6 10 6a17.4 17.4 0 0 1-3.2 3.8M6.2 6.3C3.5 8.1 2 12 2 12s3.5 6 10 6a10.8 10.8 0 0 0 3.5-.6" /></>}
+                  </svg>
+                </button>
+              </div>
             </div>
 
             {error && (

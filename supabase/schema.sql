@@ -19,7 +19,7 @@ create table if not exists documents (
   description  text,
   uploaded_at  timestamptz not null default now(),
   indexed_at   timestamptz,
-  user_id      uuid references auth.users(id) on delete cascade
+    user_id      uuid not null default auth.uid() references auth.users(id) on delete cascade
 );
 
 -- 3. Chunks table — stores text + 1536-dim embedding (text-embedding-3-small)
@@ -31,7 +31,7 @@ create table if not exists chunks (
   page          int not null default 1,
   chunk_index   int not null default 0,
   embedding     vector(1536),
-  user_id       uuid references auth.users(id) on delete cascade
+    user_id       uuid not null default auth.uid() references auth.users(id) on delete cascade
 );
 
 -- 4. Conversations table — messages stored as JSONB for simplicity
@@ -42,7 +42,7 @@ create table if not exists conversations (
   messages     jsonb not null default '[]',
   created_at   timestamptz not null default now(),
   updated_at   timestamptz not null default now(),
-  user_id      uuid references auth.users(id) on delete cascade
+    user_id      uuid not null default auth.uid() references auth.users(id) on delete cascade
 );
 
 -- 5. Vector similarity search function (cosine distance via pgvector)
